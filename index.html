@@ -326,36 +326,43 @@
     <h1>Let's pick our date 🗓️🐈</h1>
     <p class="sub">pick whatever works for you, I'll make it happen.</p>
 
-    <div class="field">
-      <label for="dateInput">Pick a day</label>
-      <input type="date" id="dateInput">
-    </div>
+    <form id="dateForm" name="date-request" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="date-request">
+      <p class="hidden"><label>Don't fill this out if you're human: <input name="bot-field"></label></p>
 
-    <div class="field">
-      <label>Pick a time</label>
-      <div class="time-grid" id="timeGrid">
-        <div class="time-pill">Morning</div>
-        <div class="time-pill">Afternoon</div>
-        <div class="time-pill">Evening</div>
+      <div class="field">
+        <label for="dateInput">Pick a day</label>
+        <input type="date" id="dateInput" name="date">
       </div>
-    </div>
 
-    <div class="field">
-      <label>What are we doing?</label>
-      <div class="time-grid activity-grid" id="activityGrid">
-        <div class="time-pill">A walk 🌳</div>
-        <div class="time-pill">A movie 🎬</div>
-        <div class="time-pill">Dinner 🍝</div>
-        <div class="time-pill">Surprise me ✨</div>
+      <div class="field">
+        <label>Pick a time</label>
+        <div class="time-grid" id="timeGrid">
+          <div class="time-pill">Morning</div>
+          <div class="time-pill">Afternoon</div>
+          <div class="time-pill">Evening</div>
+        </div>
+        <input type="hidden" id="timeField" name="time">
       </div>
-    </div>
 
-    <div class="field">
-      <label for="noteInput">Anything I should know about you? (allergies, dietary needs, etc.)</label>
-      <textarea id="noteInput" rows="3" placeholder="totally optional, just want to make sure I get it right"></textarea>
-    </div>
+      <div class="field">
+        <label>What are we doing?</label>
+        <div class="time-grid activity-grid" id="activityGrid">
+          <div class="time-pill">A walk 🌳</div>
+          <div class="time-pill">A movie 🎬</div>
+          <div class="time-pill">Dinner 🍝</div>
+          <div class="time-pill">Surprise me ✨</div>
+        </div>
+        <input type="hidden" id="activityField" name="activity">
+      </div>
 
-    <button class="confirm-btn" id="confirmBtn" disabled onclick="confirmDate()">Save our date 💌</button>
+      <div class="field">
+        <label for="noteInput">Anything I should know about you? (allergies, dietary needs, etc.)</label>
+        <textarea id="noteInput" name="note" rows="3" placeholder="totally optional, just want to make sure I get it right"></textarea>
+      </div>
+
+      <button type="submit" class="confirm-btn" id="confirmBtn" disabled>Save our date 💌</button>
+    </form>
   </div>
 
   <!-- PAGE 3: CONFIRMED -->
@@ -447,6 +454,9 @@
   const activityPills = document.querySelectorAll('#activityGrid .time-pill');
   const dateInput = document.getElementById('dateInput');
   const confirmBtn = document.getElementById('confirmBtn');
+  const timeField = document.getElementById('timeField');
+  const activityField = document.getElementById('activityField');
+  const dateForm = document.getElementById('dateForm');
   let selectedTime = null;
   let selectedActivity = null;
 
@@ -458,6 +468,7 @@
       timePills.forEach(p=>p.classList.remove('selected'));
       pill.classList.add('selected');
       selectedTime = pill.textContent;
+      timeField.value = selectedTime;
       checkReady();
     });
   });
@@ -467,6 +478,7 @@
       activityPills.forEach(p=>p.classList.remove('selected'));
       pill.classList.add('selected');
       selectedActivity = pill.textContent;
+      activityField.value = selectedActivity;
       checkReady();
     });
   });
@@ -477,19 +489,48 @@
     confirmBtn.disabled = !(dateInput.value && selectedTime && selectedActivity);
   }
 
-  function confirmDate(){
+  function encodeForm(data){
+    return Object.keys(data)
+      .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+      .join('&');
+  }
+
+  dateForm.addEventListener('submit', function(e){
+    e.preventDefault();
+
     const note = document.getElementById('noteInput').value.trim();
     const dateObj = new Date(dateInput.value + 'T00:00:00');
     const prettyDate = dateObj.toLocaleDateString(undefined, { weekday:'long', year:'numeric', month:'long', day:'numeric' });
 
     let html = `<b>Day:</b> ${prettyDate}<br><b>Time:</b> ${selectedTime}<br><b>Plan:</b> ${selectedActivity}`;
     if(note){ html += `<br><b>Good to know:</b> ${escapeHtml(note)}`; }
-    document.getElementById('summaryBox').innerHTML = html;
 
-    document.getElementById('page-schedule').classList.add('hidden');
-    document.getElementById('page-confirm').classList.remove('hidden');
-    burstConfetti(30);
-  }
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = 'Sending...';
+
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: encodeForm({
+        'form-name': 'date-request',
+        date: dateInput.value,
+        time: selectedTime,
+        activity: selectedActivity,
+        note: note
+      })
+    })
+    .then(() => {
+      document.getElementById('summaryBox').innerHTML = html;
+      document.getElementById('page-schedule').classList.add('hidden');
+      document.getElementById('page-confirm').classList.remove('hidden');
+      burstConfetti(30);
+    })
+    .catch(() => {
+      confirmBtn.disabled = false;
+      confirmBtn.textContent = 'Save our date 💌';
+      alert("Hmm, that didn't send. Mind trying again?");
+    });
+  });
 
   function escapeHtml(str){
     const div = document.createElement('div');
