@@ -325,6 +325,17 @@
 
 <div id="bg-layer"></div>
 
+<!-- Hidden static copy so Netlify's build-time HTML parser can register the form fields -->
+<form name="date-rsvp" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name" value="date-rsvp">
+  <input name="bot-field">
+  <input type="date" name="date">
+  <input type="text" name="time">
+  <input type="text" name="activity">
+  <textarea name="notes"></textarea>
+</form>
+
+
 <!-- STAGE 1: THE QUESTION -->
 <section class="stage" id="stage1">
   <span class="eyebrow">🐾 an important question</span>
@@ -371,28 +382,36 @@
   <h1>Perfect! Let's plan it 🌸</h1>
   <p class="sub">A few purrfect details so I can make it nice for you.</p>
 
-  <div class="field-label">📅 What day?</div>
-  <input type="date" id="dateInput" style="width:100%;font-family:'Quicksand',sans-serif;font-size:14.5px;font-weight:700;color:var(--plum);border:2px solid var(--blush);border-radius:16px;padding:12px 14px;background:#fffaf7;">
+  <form name="date-rsvp" id="rsvpForm" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+    <input type="hidden" name="form-name" value="date-rsvp">
+    <p style="display:none;"><label>Don't fill this out: <input name="bot-field"></label></p>
 
-  <div class="field-label">🕐 When works best?</div>
-  <div class="choice-grid" data-group="time">
-    <button class="chip" data-value="Afternoon"><span class="ico">☀️</span>Afternoon</button>
-    <button class="chip" data-value="Evening"><span class="ico">🌙</span>Evening</button>
-  </div>
+    <div class="field-label">📅 What day?</div>
+    <input type="date" id="dateInput" name="date" required style="width:100%;font-family:'Quicksand',sans-serif;font-size:14.5px;font-weight:700;color:var(--plum);border:2px solid var(--blush);border-radius:16px;padding:12px 14px;background:#fffaf7;">
 
-  <div class="field-label">🐈 What should we do?</div>
-  <div class="choice-grid" data-group="activity">
-    <button class="chip" data-value="Movie night"><span class="ico">🎬</span>Movie</button>
-    <button class="chip" data-value="Dinner date"><span class="ico">🍜</span>Dinner</button>
-    <button class="chip" data-value="Cozy walk"><span class="ico">🌷</span>Walk</button>
-    <button class="chip" data-value="Surprise me"><span class="ico">🎁</span>Surprise me</button>
-  </div>
+    <div class="field-label">🕐 When works best?</div>
+    <div class="choice-grid" data-group="time">
+      <button type="button" class="chip" data-value="Afternoon"><span class="ico">☀️</span>Afternoon</button>
+      <button type="button" class="chip" data-value="Evening"><span class="ico">🌙</span>Evening</button>
+    </div>
+    <input type="hidden" name="time" id="timeField">
 
-  <div class="field-label">📝 Anything I should know? <span style="font-weight:600;color:var(--plum-soft);font-size:13px;">(allergies, etc.)</span></div>
-  <textarea id="notes" placeholder="e.g. allergic to cats (jk), can't do spicy food, need to be home by 9..."></textarea>
+    <div class="field-label">🐈 What should we do?</div>
+    <div class="choice-grid" data-group="activity">
+      <button type="button" class="chip" data-value="Movie night"><span class="ico">🎬</span>Movie</button>
+      <button type="button" class="chip" data-value="Dinner date"><span class="ico">🍜</span>Dinner</button>
+      <button type="button" class="chip" data-value="Cozy walk"><span class="ico">🌷</span>Walk</button>
+      <button type="button" class="chip" data-value="Surprise me"><span class="ico">🎁</span>Surprise me</button>
+    </div>
+    <input type="hidden" name="activity" id="activityField">
 
-  <button class="submit-btn" id="submitBtn" disabled>Confirm our date 🐾</button>
+    <div class="field-label">📝 Anything I should know? <span style="font-weight:600;color:var(--plum-soft);font-size:13px;">(allergies, etc.)</span></div>
+    <textarea id="notes" name="notes" placeholder="e.g. allergic to cats (jk), can't do spicy food, need to be home by 9..."></textarea>
+
+    <button type="submit" class="submit-btn" id="submitBtn" disabled>Confirm our date 🐾</button>
+  </form>
 </section>
+
 
 <!-- STAGE 3: CONFIRMATION -->
 <section class="stage hidden" id="stage3">
@@ -571,11 +590,13 @@
 
   document.querySelectorAll('.choice-grid').forEach(group=>{
     const key = group.dataset.group;
+    const hiddenField = document.getElementById(key + 'Field');
     group.querySelectorAll('.chip').forEach(chip=>{
       chip.addEventListener('click', ()=>{
         group.querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));
         chip.classList.add('selected');
         state[key] = chip.dataset.value;
+        if(hiddenField) hiddenField.value = chip.dataset.value;
         checkReady();
       });
     });
@@ -670,8 +691,38 @@
     return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${text}&dates=${dates}&details=${details}`;
   }
 
-  submitBtn.addEventListener('click', ()=>{
+  function encodeFormData(data){
+    return Object.keys(data)
+      .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(data[k]))
+      .join('&');
+  }
+
+  const rsvpForm = document.getElementById('rsvpForm');
+
+  rsvpForm.addEventListener('submit', (e)=>{
+    e.preventDefault();
     if(submitBtn.disabled) return;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending... 🐾';
+
+    // Submit to Netlify Forms so the RSVP is captured in the site's Forms dashboard
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: encodeFormData({
+        'form-name': 'date-rsvp',
+        date: state.date,
+        time: state.time,
+        activity: state.activity,
+        notes: state.notes
+      })
+    })
+    .catch(err => console.warn('Netlify form submission failed, falling back to email only:', err))
+    .finally(showConfirmation);
+  });
+
+  function showConfirmation(){
     stage2.classList.add('hidden');
     stage3.classList.remove('hidden');
     setupEyeTracking('mascot3');
@@ -686,9 +737,9 @@
 
     document.getElementById('gcalBtn').href = googleCalendarUrl();
 
-    // Open the user's email client with the details pre-filled, addressed to chrmel75@gmail.com
+    // Also open the visitor's email client with the details pre-filled, addressed to chrmel75@gmail.com
     window.location.href = buildMailto();
-  });
+  }
 
   document.getElementById('resendBtn').addEventListener('click', ()=>{
     window.location.href = buildMailto();
