@@ -3,21 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Another Question for you 🌺</title>
+<title>A Question for Zy 🐾</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --cream: #fdf8ee;
-    --blush: #ffe1e8;
-    --rose: #ff5c77;
-    --rose-dark: #d63864;
-    --leaf: #6fae72;
-    --leaf-dark: #4f8a54;
-    --plum: #3f2e33;
-    --plum-soft: #74655e;
+    --cream: #fff6ef;
+    --blush: #ffdbe6;
+    --rose: #ff6f9c;
+    --rose-dark: #e2497a;
+    --caramel: #e8a87c;
+    --caramel-dark: #c47f52;
+    --plum: #4a2b45;
+    --plum-soft: #7a5673;
     --mint: #bfe9d7;
-    --shadow: rgba(63, 46, 51, 0.18);
+    --shadow: rgba(74, 43, 69, 0.18);
   }
 
   *{ box-sizing: border-box; }
@@ -31,7 +31,7 @@
 
   body{
     font-family: 'Quicksand', sans-serif;
-    background: radial-gradient(circle at 20% 20%, #fff3ea, var(--cream) 45%),
+    background: radial-gradient(circle at 20% 20%, #fff0e9, var(--cream) 45%),
                 linear-gradient(160deg, var(--cream), var(--blush) 120%);
     color: var(--plum);
     min-height: 100vh;
@@ -58,7 +58,7 @@
     animation-name: floatUp;
     animation-timing-function: ease-in;
     animation-iteration-count: infinite;
-    filter: drop-shadow(0 4px 6px rgba(63,46,51,0.08));
+    filter: drop-shadow(0 4px 6px rgba(74,43,69,0.08));
     user-select: none;
   }
 
@@ -126,7 +126,7 @@
     line-height: 1.5;
   }
 
-  /* ---------- mascot hibiscus ---------- */
+  /* ---------- mascot cat ---------- */
   .mascot{
     width: 150px;
     height: 150px;
@@ -138,21 +138,26 @@
 
   .pupil{ transition: transform 0.12s ease-out; }
 
-  .leaf-sway{
-    transform-origin: 75px 128px;
-    animation: sway 2.6s ease-in-out infinite;
+  .tail{
+    transform-origin: 60px 150px;
+    animation: wag 2.4s ease-in-out infinite;
   }
-  @keyframes sway{
-    0%, 100% { transform: rotate(-5deg); }
-    50%      { transform: rotate(5deg); }
+  @keyframes wag{
+    0%, 100% { transform: rotate(-8deg); }
+    50%      { transform: rotate(10deg); }
   }
 
-  /* ---------- button ---------- */
+  .whisker{ opacity: 0.55; }
+
+  /* ---------- buttons row ---------- */
   .btn-row{
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 18px;
     margin-top: 22px;
+    min-height: 64px;
   }
 
   .btn{
@@ -161,19 +166,47 @@
     font-size: 17px;
     border: none;
     border-radius: 999px;
-    padding: 14px 34px;
+    padding: 14px 30px;
     cursor: pointer;
     transition: transform 0.15s ease, box-shadow 0.15s ease;
     box-shadow: 0 8px 0 rgba(0,0,0,0.08);
   }
 
   .btn-yes{
-    background: linear-gradient(180deg, #ff8199, var(--rose));
+    background: linear-gradient(180deg, #ff8fb3, var(--rose));
     color: #fff;
     box-shadow: 0 8px 0 var(--rose-dark);
   }
   .btn-yes:hover{ transform: translateY(-2px) scale(1.06); }
   .btn-yes:active{ transform: translateY(2px); box-shadow: 0 4px 0 var(--rose-dark); }
+
+  .btn-no{
+    background: #fff;
+    color: var(--plum-soft);
+    border: 2px solid var(--blush);
+    box-shadow: 0 6px 0 var(--blush);
+    position: absolute;
+    left: 50%;
+    transform: translateX(56px);
+  }
+
+  .no-bubble{
+    position: absolute;
+    top: -34px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--plum);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 10px;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .no-bubble.show{ opacity: 1; }
 
   /* ---------- step 2: choices ---------- */
   .field-label{
@@ -186,12 +219,6 @@
     display: flex;
     align-items: center;
     gap: 6px;
-  }
-
-  .field-hint{
-    font-weight: 600;
-    color: var(--plum-soft);
-    font-size: 12.5px;
   }
 
   .choice-grid{
@@ -227,7 +254,7 @@
     background: linear-gradient(180deg, #fff0f5, var(--blush));
     border-color: var(--rose);
     color: var(--rose-dark);
-    box-shadow: 0 4px 12px rgba(255,92,119,0.25);
+    box-shadow: 0 4px 12px rgba(255,111,156,0.25);
   }
 
   textarea{
@@ -245,7 +272,7 @@
     background: #fffaf7;
   }
   textarea:focus{ outline: none; border-color: var(--rose); }
-  textarea::placeholder{ color: #c9a8ad; }
+  textarea::placeholder{ color: #c9b3c4; }
 
   .submit-btn{
     margin-top: 26px;
@@ -257,7 +284,7 @@
     border-radius: 999px;
     padding: 14px;
     cursor: pointer;
-    background: linear-gradient(180deg, #ff8199, var(--rose));
+    background: linear-gradient(180deg, #ff8fb3, var(--rose));
     color: #fff;
     box-shadow: 0 8px 0 var(--rose-dark);
     transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
@@ -309,52 +336,51 @@
 </form>
 
 
-<!-- STAGE 1: THE  -->
+<!-- STAGE 1: THE QUESTION -->
 <section class="stage" id="stage1">
-  <span class="eyebrow">🌺 I guess you know it</span>
+  <span class="eyebrow">🐾 an important question</span>
 
   <div class="mascot" id="mascot1">
     <svg viewBox="0 0 150 160">
-      <ellipse cx="75" cy="150" rx="26" ry="8" fill="#3f2e33" opacity="0.08"/>
-      <path d="M75 140 C 75 122 75 104 75 96" stroke="#5a8f5f" stroke-width="6" fill="none" stroke-linecap="round"/>
-      <g class="leaf-sway">
-        <path d="M75 124 C 54 118 40 128 33 109 C 52 106 68 111 75 124 Z" fill="#6fae72"/>
-        <path d="M75 116 C 96 108 112 116 119 98 C 100 98 84 103 75 116 Z" fill="#7cbb7e"/>
-      </g>
-      <g>
-        <g transform="rotate(0 75 68)"><ellipse cx="75" cy="38" rx="17" ry="32" fill="#ff5c77"/></g>
-        <g transform="rotate(72 75 68)"><ellipse cx="75" cy="38" rx="17" ry="32" fill="#ff7d8f"/></g>
-        <g transform="rotate(144 75 68)"><ellipse cx="75" cy="38" rx="17" ry="32" fill="#ff5c77"/></g>
-        <g transform="rotate(216 75 68)"><ellipse cx="75" cy="38" rx="17" ry="32" fill="#ff7d8f"/></g>
-        <g transform="rotate(288 75 68)"><ellipse cx="75" cy="38" rx="17" ry="32" fill="#ff5c77"/></g>
-      </g>
-      <circle cx="75" cy="68" r="30" fill="#ffe8a3"/>
+      <ellipse cx="75" cy="150" rx="26" ry="8" fill="#4a2b45" opacity="0.08"/>
+      <path class="tail" d="M100 130 Q 145 120 130 75" stroke="#e8a87c" stroke-width="12" fill="none" stroke-linecap="round"/>
+      <ellipse cx="75" cy="110" rx="42" ry="34" fill="#f0bd93"/>
+      <circle cx="75" cy="60" r="38" fill="#e8a87c"/>
+      <path d="M42 40 L30 8 L62 32 Z" fill="#e8a87c"/>
+      <path d="M108 40 L120 8 L88 32 Z" fill="#e8a87c"/>
+      <path d="M46 34 L38 16 L58 30 Z" fill="#ffd6e0"/>
+      <path d="M104 34 L112 16 L92 30 Z" fill="#ffd6e0"/>
       <g class="eyes">
-        <ellipse cx="63" cy="68" rx="6" ry="8" fill="#3f2e33" class="pupil" id="eyeL"/>
-        <ellipse cx="87" cy="68" rx="6" ry="8" fill="#3f2e33" class="pupil" id="eyeR"/>
+        <ellipse cx="60" cy="60" rx="7" ry="9" fill="#4a2b45" class="pupil" id="eyeL"/>
+        <ellipse cx="90" cy="60" rx="7" ry="9" fill="#4a2b45" class="pupil" id="eyeR"/>
       </g>
-      <circle cx="59" cy="78" r="4" fill="#ff9eae" opacity="0.6"/>
-      <circle cx="91" cy="78" r="4" fill="#ff9eae" opacity="0.6"/>
-      <path d="M67 82 Q 75 88 83 82" stroke="#3f2e33" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-      <line x1="75" y1="98" x2="72" y2="114" stroke="#d63864" stroke-width="3" stroke-linecap="round"/>
-      <circle cx="71" cy="117" r="3.5" fill="#ffcf3f"/>
+      <ellipse cx="75" cy="74" rx="5" ry="4" fill="#c47f52"/>
+      <path d="M75 78 Q 70 84 64 80" stroke="#4a2b45" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M75 78 Q 80 84 86 80" stroke="#4a2b45" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <g class="whisker" stroke="#4a2b45" stroke-width="1.6" stroke-linecap="round">
+        <line x1="42" y1="66" x2="14" y2="60"/>
+        <line x1="42" y1="72" x2="14" y2="72"/>
+        <line x1="108" y1="66" x2="136" y2="60"/>
+        <line x1="108" y1="72" x2="136" y2="72"/>
+      </g>
     </svg>
   </div>
 
-  <h1>Hey <span class="name">Zy</span> 💕<br>round three?</h1>
-  <p class="sub">🌷</p>
-  <div class="paw-divider">🌺 🌺 🌷</div>
+  <h1>Hey <span class="name">Zy</span> 💕<br>will you go on a date with me?</h1>
+  <p class="sub">There's only one correct answer here... the other button knows it too. 🐈</p>
 
   <div class="btn-row" id="btnRow">
-    <button class="btn btn-yes" id="yesBtn">Let's do it 🌺</button>
+    <button class="btn btn-yes" id="yesBtn">Yes! 🐾💖</button>
+    <button class="btn btn-no" id="noBtn">No</button>
+    <div class="no-bubble" id="noBubble">nyaa~ try again 🙀</div>
   </div>
 </section>
 
 <!-- STAGE 2: DETAILS -->
 <section class="stage hidden" id="stage2">
-  <span class="eyebrow">🌸 yay!</span>
+  <span class="eyebrow">🐱 yay, she said yes</span>
   <h1>Perfect! Let's plan it 🌸</h1>
-  <p class="sub">A few lovely details so I can make it nice for you.</p>
+  <p class="sub">A few purrfect details so I can make it nice for you.</p>
 
   <form name="date-rsvp" id="rsvpForm" method="POST" data-netlify="true" netlify-honeypot="bot-field">
     <input type="hidden" name="form-name" value="date-rsvp">
@@ -370,31 +396,19 @@
     </div>
     <input type="hidden" name="time" id="timeField">
 
-    <div class="field-label">🌷 What should we do? <span class="field-hint">(pick up to 2)</span></div>
-    <div class="choice-grid" data-group="activity" data-max="2">
+    <div class="field-label">🐈 What should we do?</div>
+    <div class="choice-grid" data-group="activity">
       <button type="button" class="chip" data-value="Movie night"><span class="ico">🎬</span>Movie</button>
       <button type="button" class="chip" data-value="Dinner date"><span class="ico">🍜</span>Dinner</button>
       <button type="button" class="chip" data-value="Cozy walk"><span class="ico">🌷</span>Walk</button>
-      <button type="button" class="chip" data-value="Picnic"><span class="ico">🧺</span>Picnic</button>
-      <button type="button" class="chip" data-value="Game night"><span class="ico">🎲</span>Games</button>
-      <button type="button" class="chip" data-value="Stargazing"><span class="ico">🌌</span>Stargazing</button>
-      <button type="button" class="chip" data-value="Karaoke"><span class="ico">🎤</span>Karaoke</button>
-      <button type="button" class="chip" data-value="Bowling"><span class="ico">🎳</span>Bowling</button>
-      <button type="button" class="chip" data-value="Ice cream date"><span class="ico">🍦</span>Ice cream</button>
-      <button type="button" class="chip" data-value="Church"><span class="ico">⛪</span>Church</button>
-      <button type="button" class="chip" data-value="Museum visit"><span class="ico">🖼️</span>Museum</button>
-      <button type="button" class="chip" data-value="Farmers market"><span class="ico">🍓</span>Market</button>
-      <button type="button" class="chip" data-value="Amusement park"><span class="ico">🎡</span>Amusement park</button>
-      <button type="button" class="chip" data-value="Road trip"><span class="ico">🚗</span>Road trip</button>
-      <button type="button" class="chip" data-value="Cooking at home"><span class="ico">🍳</span>Cook together</button>
       <button type="button" class="chip" data-value="Surprise me"><span class="ico">🎁</span>Surprise me</button>
     </div>
     <input type="hidden" name="activity" id="activityField">
 
     <div class="field-label">📝 Anything I should know? <span style="font-weight:600;color:var(--plum-soft);font-size:13px;">(allergies, etc.)</span></div>
-    <textarea id="notes" name="notes" placeholder="e.g. allergic to bees (jk), can't do spicy food, need to be home by 9..."></textarea>
+    <textarea id="notes" name="notes" placeholder="e.g. allergic to cats (jk), can't do spicy food, need to be home by 9..."></textarea>
 
-    <button type="submit" class="submit-btn" id="submitBtn" disabled>Confirm our date 🌺</button>
+    <button type="submit" class="submit-btn" id="submitBtn" disabled>Confirm our date 🐾</button>
   </form>
 </section>
 
@@ -403,41 +417,38 @@
 <section class="stage hidden" id="stage3">
   <div class="mascot" id="mascot3">
     <svg viewBox="0 0 150 160">
-      <ellipse cx="75" cy="150" rx="26" ry="8" fill="#3f2e33" opacity="0.08"/>
-      <path d="M75 140 C 75 122 75 104 75 96" stroke="#5a8f5f" stroke-width="6" fill="none" stroke-linecap="round"/>
-      <g class="leaf-sway">
-        <path d="M75 124 C 54 118 40 128 33 109 C 52 106 68 111 75 124 Z" fill="#6fae72"/>
-        <path d="M75 116 C 96 108 112 116 119 98 C 100 98 84 103 75 116 Z" fill="#7cbb7e"/>
+      <ellipse cx="75" cy="150" rx="26" ry="8" fill="#4a2b45" opacity="0.08"/>
+      <path class="tail" d="M100 130 Q 145 120 130 75" stroke="#e8a87c" stroke-width="12" fill="none" stroke-linecap="round"/>
+      <ellipse cx="75" cy="110" rx="42" ry="34" fill="#f0bd93"/>
+      <circle cx="75" cy="60" r="38" fill="#e8a87c"/>
+      <path d="M42 40 L30 8 L62 32 Z" fill="#e8a87c"/>
+      <path d="M108 40 L120 8 L88 32 Z" fill="#e8a87c"/>
+      <path d="M46 34 L38 16 L58 30 Z" fill="#ffd6e0"/>
+      <path d="M104 34 L112 16 L92 30 Z" fill="#ffd6e0"/>
+      <path d="M52 58 Q 60 50 68 58" stroke="#4a2b45" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M82 58 Q 90 50 98 58" stroke="#4a2b45" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <ellipse cx="75" cy="74" rx="5" ry="4" fill="#c47f52"/>
+      <path d="M60 82 Q 75 96 90 82" stroke="#4a2b45" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <g class="whisker" stroke="#4a2b45" stroke-width="1.6" stroke-linecap="round">
+        <line x1="42" y1="66" x2="14" y2="60"/>
+        <line x1="42" y1="72" x2="14" y2="72"/>
+        <line x1="108" y1="66" x2="136" y2="60"/>
+        <line x1="108" y1="72" x2="136" y2="72"/>
       </g>
-      <g>
-        <g transform="rotate(0 75 68)"><ellipse cx="75" cy="38" rx="17" ry="32" fill="#ff5c77"/></g>
-        <g transform="rotate(72 75 68)"><ellipse cx="75" cy="38" rx="17" ry="32" fill="#ff7d8f"/></g>
-        <g transform="rotate(144 75 68)"><ellipse cx="75" cy="38" rx="17" ry="32" fill="#ff5c77"/></g>
-        <g transform="rotate(216 75 68)"><ellipse cx="75" cy="38" rx="17" ry="32" fill="#ff7d8f"/></g>
-        <g transform="rotate(288 75 68)"><ellipse cx="75" cy="38" rx="17" ry="32" fill="#ff5c77"/></g>
-      </g>
-      <circle cx="75" cy="68" r="30" fill="#ffe8a3"/>
-      <path d="M52 68 Q 60 60 68 68" stroke="#3f2e33" stroke-width="3" fill="none" stroke-linecap="round"/>
-      <path d="M82 68 Q 90 60 98 68" stroke="#3f2e33" stroke-width="3" fill="none" stroke-linecap="round"/>
-      <circle cx="59" cy="78" r="4" fill="#ff9eae" opacity="0.6"/>
-      <circle cx="91" cy="78" r="4" fill="#ff9eae" opacity="0.6"/>
-      <path d="M60 82 Q 75 96 90 82" stroke="#3f2e33" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-      <line x1="75" y1="98" x2="72" y2="114" stroke="#d63864" stroke-width="3" stroke-linecap="round"/>
-      <circle cx="71" cy="117" r="3.5" fill="#ffcf3f"/>
     </svg>
   </div>
   <span class="eyebrow">💌 it's a date</span>
   <h1>Yay Zy! Can't wait 🥹💕</h1>
   <p class="sub">Here's what we're locking in:</p>
   <div class="final-summary" id="summaryBox"></div>
-  <div class="paw-divider">🌺 🌺 🌺 🌺 🌺</div>
+  <div class="paw-divider">🐾 🐾 🐾 🐾 🐾</div>
   <p class="sub" style="margin-top:14px;">Sent straight to me — I'll see it soon 💌</p>
 </section>
 
 <script>
   /* ---------------- floating background ---------------- */
   const bgLayer = document.getElementById('bg-layer');
-  const emojis = ['🌸','🌺','💐','🌿','🍃','💮','💕'];
+  const emojis = ['🐾','💕','🐱','💗','🐈','💖','🌸'];
   const COUNT = 26;
   for(let i=0;i<COUNT;i++){
     const el = document.createElement('div');
@@ -471,11 +482,59 @@
   }
   setupEyeTracking('mascot1');
 
-  /* ---------------- stage 1: yes ---------------- */
+  /* ---------------- stage 1: yes / runaway no ---------------- */
   const stage1 = document.getElementById('stage1');
   const stage2 = document.getElementById('stage2');
   const stage3 = document.getElementById('stage3');
+  const btnRow = document.getElementById('btnRow');
+  const noBtn = document.getElementById('noBtn');
   const yesBtn = document.getElementById('yesBtn');
+  const noBubble = document.getElementById('noBubble');
+
+  let dodgeCount = 0;
+  const bubbleMsgs = [
+    "nyaa~ try again 🙀","not so fast 😼","catch me if you can 🐾",
+    "no is not an option 💅","she said no?? nope 🚫","hehe missed me 🐈"
+  ];
+
+  function randomDodge(){
+    const rowRect = btnRow.getBoundingClientRect();
+    const btnRect = noBtn.getBoundingClientRect();
+    const maxX = rowRect.width - btnRect.width - 8;
+    const maxY = 0; // keep vertical simple, mostly horizontal + slight jitter
+    let newX = Math.random() * Math.max(maxX, 40);
+    let newY = (Math.random() - 0.5) * 30;
+    noBtn.style.left = newX + 'px';
+    noBtn.style.transform = `translateY(${newY}px)`;
+
+    dodgeCount++;
+    noBubble.textContent = bubbleMsgs[Math.floor(Math.random()*bubbleMsgs.length)];
+    noBubble.classList.add('show');
+    clearTimeout(randomDodge._t);
+    randomDodge._t = setTimeout(()=> noBubble.classList.remove('show'), 900);
+
+    if(dodgeCount > 4){
+      noBtn.style.fontSize = Math.max(11, 15 - dodgeCount*0.6) + 'px';
+      noBtn.style.padding = '10px ' + Math.max(14, 26 - dodgeCount) + 'px';
+    }
+  }
+
+  // desktop hover dodge
+  noBtn.addEventListener('mouseenter', randomDodge);
+  // mobile: dodge on touch near it
+  noBtn.addEventListener('touchstart', (e)=>{
+    e.preventDefault();
+    randomDodge();
+  }, {passive:false});
+  // also dodge if cursor gets close, for extra cheekiness
+  btnRow.addEventListener('mousemove', (e)=>{
+    const btnRect = noBtn.getBoundingClientRect();
+    const dist = Math.hypot(
+      e.clientX - (btnRect.left+btnRect.width/2),
+      e.clientY - (btnRect.top+btnRect.height/2)
+    );
+    if(dist < 55) randomDodge();
+  });
 
   function goToStage2(){
     stage1.classList.add('hidden');
@@ -508,7 +567,7 @@
   }
 
   /* ---------------- stage 2: choices ---------------- */
-  const state = { date: null, time: null, activity: [], notes: '' };
+  const state = { date: null, time: null, activity: null, notes: '' };
   const submitBtn = document.getElementById('submitBtn');
   const dateInput = document.getElementById('dateInput');
   const todayStr = new Date().toISOString().split('T')[0];
@@ -521,37 +580,12 @@
   document.querySelectorAll('.choice-grid').forEach(group=>{
     const key = group.dataset.group;
     const hiddenField = document.getElementById(key + 'Field');
-    const maxSelect = parseInt(group.dataset.max || '1', 10);
-    const isMulti = maxSelect > 1;
-
     group.querySelectorAll('.chip').forEach(chip=>{
       chip.addEventListener('click', ()=>{
-        if(isMulti){
-          const current = state[key]; // array
-          const already = current.includes(chip.dataset.value);
-
-          if(already){
-            // deselect this one
-            state[key] = current.filter(v => v !== chip.dataset.value);
-            chip.classList.remove('selected');
-          } else {
-            if(current.length >= maxSelect){
-              // bump the oldest pick to make room for the new one
-              const removedValue = current.shift();
-              const removedChip = group.querySelector(`.chip[data-value="${removedValue}"]`);
-              if(removedChip) removedChip.classList.remove('selected');
-            }
-            current.push(chip.dataset.value);
-            chip.classList.add('selected');
-          }
-
-          if(hiddenField) hiddenField.value = state[key].join(', ');
-        } else {
-          group.querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));
-          chip.classList.add('selected');
-          state[key] = chip.dataset.value;
-          if(hiddenField) hiddenField.value = chip.dataset.value;
-        }
+        group.querySelectorAll('.chip').forEach(c=>c.classList.remove('selected'));
+        chip.classList.add('selected');
+        state[key] = chip.dataset.value;
+        if(hiddenField) hiddenField.value = chip.dataset.value;
         checkReady();
       });
     });
@@ -560,12 +594,8 @@
   const notesEl = document.getElementById('notes');
   notesEl.addEventListener('input', ()=>{ state.notes = notesEl.value.trim(); });
 
-  function hasActivity(){
-    return Array.isArray(state.activity) ? state.activity.length > 0 : !!state.activity;
-  }
-
   function checkReady(){
-    submitBtn.disabled = !(state.date && state.time && hasActivity());
+    submitBtn.disabled = !(state.date && state.time && state.activity);
   }
 
   function niceDate(dstr){
@@ -587,9 +617,7 @@
     if(submitBtn.disabled) return;
 
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Sending... 🌺';
-
-    const activityValue = Array.isArray(state.activity) ? state.activity.join(', ') : state.activity;
+    submitBtn.textContent = 'Sending... 🐾';
 
     // Submit to Netlify Forms so the RSVP is captured in the site's Forms dashboard
     fetch('/', {
@@ -599,7 +627,7 @@
         'form-name': 'date-rsvp',
         date: state.date,
         time: state.time,
-        activity: activityValue,
+        activity: state.activity,
         notes: state.notes
       })
     })
@@ -613,13 +641,11 @@
     setupEyeTracking('mascot3');
     burstHearts();
 
-    const activityDisplay = Array.isArray(state.activity) ? state.activity.join(' & ') : state.activity;
-
     const summary = document.getElementById('summaryBox');
     summary.innerHTML =
       `📅 <b>Day:</b> ${niceDate(state.date)}<br>` +
       `🕐 <b>When:</b> ${state.time}<br>` +
-      `🌷 <b>Plan:</b> ${activityDisplay}<br>` +
+      `🐈 <b>Plan:</b> ${state.activity}<br>` +
       `📝 <b>Good to know:</b> ${state.notes ? state.notes.replace(/</g,'&lt;') : 'nothing noted — good to go!'}`;
   }
 </script>
