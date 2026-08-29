@@ -221,6 +221,22 @@
     gap: 6px;
   }
 
+  .field-label:first-of-type{ margin-top: 4px; }
+
+  .text-input{
+    width: 100%;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--plum);
+    border: 2px solid var(--blush);
+    border-radius: 16px;
+    padding: 12px 14px;
+    background: #fffaf7;
+  }
+  .text-input:focus{ outline: none; border-color: var(--rose); }
+  .text-input::placeholder{ color: #c9b3c4; font-weight: 600; }
+
   .choice-grid{
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -329,6 +345,7 @@
 <form name="date-rsvp" data-netlify="true" netlify-honeypot="bot-field" hidden>
   <input type="hidden" name="form-name" value="date-rsvp">
   <input name="bot-field">
+  <input type="text" name="name">
   <input type="date" name="date">
   <input type="text" name="time">
   <input type="text" name="activity">
@@ -386,8 +403,11 @@
     <input type="hidden" name="form-name" value="date-rsvp">
     <p style="display:none;"><label>Don't fill this out: <input name="bot-field"></label></p>
 
+    <div class="field-label">💌 What's your name?</div>
+    <input type="text" id="nameInput" name="name" class="text-input" placeholder="e.g. Alex" autocomplete="name" required>
+
     <div class="field-label">📅 What day?</div>
-    <input type="date" id="dateInput" name="date" required style="width:100%;font-family:'Quicksand',sans-serif;font-size:14.5px;font-weight:700;color:var(--plum);border:2px solid var(--blush);border-radius:16px;padding:12px 14px;background:#fffaf7;">
+    <input type="date" id="dateInput" name="date" required class="text-input">
 
     <div class="field-label">🕐 When works best?</div>
     <div class="choice-grid" data-group="time">
@@ -567,11 +587,18 @@
   }
 
   /* ---------------- stage 2: choices ---------------- */
-  const state = { date: null, time: null, activity: null, notes: '' };
+  const state = { name: '', date: null, time: null, activity: null, notes: '' };
   const submitBtn = document.getElementById('submitBtn');
+  const nameInput = document.getElementById('nameInput');
   const dateInput = document.getElementById('dateInput');
   const todayStr = new Date().toISOString().split('T')[0];
   dateInput.min = todayStr;
+
+  nameInput.addEventListener('input', ()=>{
+    state.name = nameInput.value.trim();
+    checkReady();
+  });
+
   dateInput.addEventListener('change', ()=>{
     state.date = dateInput.value;
     checkReady();
@@ -595,7 +622,7 @@
   notesEl.addEventListener('input', ()=>{ state.notes = notesEl.value.trim(); });
 
   function checkReady(){
-    submitBtn.disabled = !(state.date && state.time && state.activity);
+    submitBtn.disabled = !(state.name && state.date && state.time && state.activity);
   }
 
   function niceDate(dstr){
@@ -625,6 +652,7 @@
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: encodeFormData({
         'form-name': 'date-rsvp',
+        name: state.name,
         date: state.date,
         time: state.time,
         activity: state.activity,
@@ -643,6 +671,7 @@
 
     const summary = document.getElementById('summaryBox');
     summary.innerHTML =
+      `💌 <b>Name:</b> ${state.name.replace(/</g,'&lt;')}<br>` +
       `📅 <b>Day:</b> ${niceDate(state.date)}<br>` +
       `🕐 <b>When:</b> ${state.time}<br>` +
       `🐈 <b>Plan:</b> ${state.activity}<br>` +
